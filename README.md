@@ -1,2 +1,2 @@
 # NewsScraper
-This app will scrape news stories from another web site and allow you to leave comments about the article.
+This app will scrape news stories from Reddit News and allow you to leave comments about the articles.
