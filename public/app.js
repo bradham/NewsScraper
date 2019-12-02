@@ -1,7 +1,13 @@
+//var mongoose = require("mongoose");
+// Require all models
+//var db = require("../models");
+
 
 $("#get-articles").on("click", function () {
     // Empty the articles from the articles section
     $("#articles").empty();
+
+    scrapeArticles();
 
   // Grab the articles as a json
   $.getJSON("/articles", function (data) {
@@ -18,3 +24,8 @@ $("#get-articles").on("click", function () {
 
 
 });
+
+function scrapeArticles() {
+  $.get("/scrape", function (data) {});
+
+}
