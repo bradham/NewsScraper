@@ -1,0 +1,12 @@
+body {
+    height: 1500px;
+    background-image: linear-gradient(#1E90FF, #87CEFA);
+}
+
+#articles {
+    border: red solid 2px;
+}
+
+.article-post {
+    border: red solid 2px;
+}

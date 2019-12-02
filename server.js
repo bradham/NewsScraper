@@ -2,6 +2,7 @@ var express = require("express");
 //TODO: implement morgan
 //var logger = require("morgan");
 var mongoose = require("mongoose");
+var fs = require("fs");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -30,27 +31,34 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 //TODO: Set config fikle for local or deployment
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/newsscraper", { useNewUrlParser: true });
 
 // Routes
 
 // A GET route for scraping the Reddit news website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios.get("https://www.reddit.com/r/news/").then(function(response) {
+  axios.get("https://www.macrumors.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
+    //Save data to file for debugging
+    // fs.writeFile('./page_data.txt', response.data, function (err) {
+    //   if (err) throw err;
+    //   console.log('Saved data to file!');
+    // });
 
     //TODO: Check proper tags
-    // Now, we grab every h2 within an article tag, and do the following:
-    $("article h2").each(function(i, element) {
+    // Now, we grab every h3 (for r/news) within an article tag, and do the following:
+    $(".article h2").each(function(i, element) {
       // Save an empty result object
+      console.log("element in 'h2' is: " + element);
       var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
         .children("a")
         .text();
+        console.log("The title is " + result.title);
       result.link = $(this)
         .children("a")
         .attr("href");
