@@ -43,7 +43,7 @@ app.get("/scrape", function (req, res) {
   })
   .catch(function (err) {
     // If an error occurred, send it to the client
-    //res.json(err);
+    res.json(err);
   });
 
   // First, we grab the body of the html with axios
@@ -60,7 +60,7 @@ app.get("/scrape", function (req, res) {
     // Now, we grab every h2 (for macrumors) within an article class, and do the following:
     $(".article").each(function (i, element) {
       // Save an empty result object
-      console.log("element in '.article' is: " + element);
+      //console.log("element in '.article' is: " + element);
       var result = {};
 
       // Add the text and href of every link, and save them as properties of the result object
@@ -73,16 +73,18 @@ app.get("/scrape", function (req, res) {
         .children("h2")
         .children("a")
         .attr("href");
-      result.preview = $(this)
+      let tempString = $(this)
         .children(".content")
         .children(".content_inner")
         .text();
+      //Only save the 1st 50 chars to the databse.
+      result.preview = tempString.substr(0, 100);
 
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)
         .then(function (dbArticle) {
           // View the added result in the console
-          console.log(dbArticle);
+          //console.log(dbArticle);
         })
         .catch(function (err) {
           // If an error occurred, log it
