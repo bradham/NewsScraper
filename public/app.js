@@ -20,8 +20,10 @@ $("#get-articles").on("click", function () {
         // Display the apropos information on the page
         $("#articles").append("<div class='article-post'>" +
           "<a href='" + dataArticles[i].link + "'>" + dataArticles[i].title + "</a>" +
-          "<br /> <p data-id='" + dataArticles[i]._id + "'>" + dataArticles[i].preview +
-          "...</p></div>");
+          "<br /> <p data-id='" + dataArticles[i]._id + "'>" +
+          dataArticles[i].preview + "...</p>" +
+          "<form><input type='button' value='Save Article' id='save-articles'></form>" +
+          "</div>");
       }
     });
 
