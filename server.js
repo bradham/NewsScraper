@@ -42,13 +42,14 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 // A GET route for scraping the Reddit news website
 app.get("/scrape", function (req, res) {
   // Drop data collection to crreate a fresh, updated query
-  db.Article.remove({}, function(){
-
-  })
-  .catch(function (err) {
-    // If an error occurred, send it to the client
-    res.json(err);
-  });
+  /*   db.Article.remove({}, function(){
+  
+    })
+    .catch(function (err) {
+      // If an error occurred, send it to the client
+      res.json(err);
+    });
+   */
 
   // First, we grab the body of the html with axios
   axios.get("https://www.macrumors.com/").then(function (response) {
@@ -72,7 +73,7 @@ app.get("/scrape", function (req, res) {
         .children("h2")
         .children("a")
         .text();
-      console.log("The title is " + result.title);
+      //console.log("The title is " + result.title);
       result.link = $(this)
         .children("h2")
         .children("a")
@@ -81,19 +82,37 @@ app.get("/scrape", function (req, res) {
         .children(".content")
         .children(".content_inner")
         .text();
-      //Only save the 1st 50 chars to the databse.
+      //Only save the 1st 100 chars to the databse for the preview.
       result.preview = tempString.substr(0, 100);
 
-      // Create a new Article using the `result` object built from scraping
-      db.Article.create(result)
+      //Check to see if article is already present
+      db.Article.find({ title: result.title })
         .then(function (dbArticle) {
           // View the added result in the console
-          //console.log(dbArticle);
+          //console.log("dbArticle from dup check:\n" + dbArticle)
+          if (!dbArticle.length) {
+            console.log("Didn't find a match for title.");
+
+            // Create a new Article using the `result` object built from scraping
+            db.Article.create(result)
+              .then(function (dbArticle) {
+                // View the added result in the console
+                console.log("New dbArticle added");
+              })
+              .catch(function (err) {
+                // If an error occurred, log it
+                console.log(err);
+              });
+
+          } else {
+            console.log("Found Article.find: " + dbArticle[0].title + "\nNot saving duplicate in db.");
+          };
         })
         .catch(function (err) {
           // If an error occurred, log it
           console.log(err);
         });
+
     });
 
     // Send a message to the client
@@ -137,7 +156,7 @@ app.post("/articles/:id", function (req, res) {
   db.Note.create(req.body)
     .then(function (dbNote) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
-      // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
+      // { new: true } tells the query that we want it to return the updated Article -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
       return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
     })
@@ -154,4 +173,5 @@ app.post("/articles/:id", function (req, res) {
 // Start the server
 app.listen(PORT, function () {
   console.log("App running on port " + PORT + "!\n***\nhttp://localhost:" + PORT + "\n***");
+
 });
