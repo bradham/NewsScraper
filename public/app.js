@@ -41,10 +41,11 @@ $(document).on("click", ".save-article", function() {
     method: "POST",
     url: "/articles/" + thisId,
     data: {
+      saved: true
       // Value taken from title input
-      title: $("#titleinput").val(),
+      //title: $("#titleinput").val(),
       // Value taken from note textarea
-      body: $("#bodyinput").val()
+      //body: $("#bodyinput").val()
     }
   })
     // With that done

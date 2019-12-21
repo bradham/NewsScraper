@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="./style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <title>Scraping MacRumors.com With Mongoose</title>
 </head>
 
@@ -13,7 +14,10 @@
     <h2><i>News from MacRumors</i></h2>
     
     <form>
-      <input type="button" value="Scrape MacRumors.com" id="get-articles">
+      <!-- <input type="button" value="Scrape MacRumors.com" id="get-articles" class="btn btn-success"> -->
+      <a href="index.html" id="get-articles" class="btn btn-success shadow p-3 mb-5 rounded">Scrape MacRumors.com</a>
+      <a href="articles.html" class="btn btn-danger shadow p-3 mb-5 rounded">View Saved Articles</a>
+      <!-- <input type="button" onclick="window.location.href='public/articles';" value="View Saved Articles" id="saved-articles-btn" class="btn btn-danger"> -->
     </form>
 
     <div id="articles">No articles scraped</div>
